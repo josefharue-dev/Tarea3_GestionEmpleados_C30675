@@ -1,0 +1,85 @@
+﻿@model List<Tarea3_JosefhArguello.Models.Empleado>
+
+<h2>Lista de Empleados</h2>
+
+<form method="get">
+    <input type="text" name="busqueda" value="@ViewBag.Busqueda" placeholder="Buscar..." />
+    <button type="submit">Buscar</button>
+</form>
+
+<br />
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Nuevo Empleado</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre Completo</th>
+            <th>Departamento</th>
+            <th>Salario</th>
+            <th>Fecha Ingreso</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.NombreCompleto</td>
+                <td>@item.Departamento</td>
+                <td>@item.Salario.ToString("C")</td>
+                <td>@item.FechaIngreso.ToShortDateString()</td>
+
+
+                <td>
+                    @if (item.Activo)
+                    {
+                        <span class="badge bg-success">Activo</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Dado de Baja</span>
+                    }
+                </td>
+
+ 
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+
+                    @if (item.Activo)
+                    {
+                        <a asp-action="ToggleActivo" asp-route-id="@item.Id">Dar de Baja</a>
+                    }
+                    else
+                    {
+                        <a asp-action="ToggleActivo" asp-route-id="@item.Id">Activar</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    Página @ViewBag.PaginaActual de @ViewBag.TotalPaginas
+</div>
+
+<div>
+    @if (ViewBag.PaginaActual > 1)
+    {
+        <a asp-action="Index"
+           asp-route-pagina="@(ViewBag.PaginaActual - 1)"
+           asp-route-busqueda="@ViewBag.Busqueda">Anterior</a>
+    }
+
+    @if (ViewBag.PaginaActual < ViewBag.TotalPaginas)
+    {
+        <a asp-action="Index"
+           asp-route-pagina="@(ViewBag.PaginaActual + 1)"
+           asp-route-busqueda="@ViewBag.Busqueda">Siguiente</a>
+    }
+</div>
