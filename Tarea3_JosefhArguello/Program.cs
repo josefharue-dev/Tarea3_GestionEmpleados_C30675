@@ -9,6 +9,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddScoped<IEmpleadoRepository, EmpleadoRepository>();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -32,7 +34,7 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{controller=Empleados}/{action=Index}/{id?}")
     .WithStaticAssets();
 
 app.Run();
